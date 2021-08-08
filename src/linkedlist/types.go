@@ -10,6 +10,7 @@ type LinkedList interface {
 	AddAfterSpecificNode(i uint, data *struct{}) error
 }
 
+// Node use for holding LinkedList data
 type Node struct {
 	Data *struct{}
 	Next *Node
