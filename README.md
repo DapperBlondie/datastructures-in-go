@@ -6,15 +6,20 @@
  All functions are manifest enough. For finding a node by its value
  implements Equals function for your structure.
  
+***
+
 ## Sets
  All functions have same functionalities for other sets library in other
  languages, But you need to implement the Equals method for your custom structure.
 
 *** 
 ## Equals Method Suggestion
-```
+```go
 func (s *<Struct>) Equals(data *<Struct>) bool {}
+
 func (s <Struct>) Equals(data <Struct>) bool {}
 ```
 My suggestion about implementing the Equals function for any structure 
-you want to define.
+you want to define.<br>
+I use ``` reflect ``` package for applying basic metaProgramming for intelligent 
+comparison.

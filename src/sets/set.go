@@ -15,7 +15,7 @@ func NewSet() *Sets {
 // AddElement use for adding element, but you should implement the Equals function for comparison between structures
 func (set *Sets) AddElement(data interface{}) (error, bool) {
 	td := reflect.TypeOf(data)
-	if td.Kind() == reflect.PtrTo(reflect.TypeOf(reflect.Struct)).Kind() {
+	if td.Kind() == reflect.PtrTo(td).Kind() {
 		method, ok := td.MethodByName("Equals")
 		if !ok {
 			return errors.New("you are not implement Equals method for comparison"), false
@@ -68,7 +68,7 @@ func (set *Sets) ContainsElement(data interface{}) bool {
 // DeleteElement for deleting a element from set
 func (set *Sets) DeleteElement(data interface{}) (error, bool) {
 	td := reflect.TypeOf(data)
-	if td.Kind() == reflect.PtrTo(reflect.TypeOf(reflect.Struct)).Kind() {
+	if td.Kind() == reflect.PtrTo(td).Kind() {
 		method, ok := td.MethodByName("Equals")
 		if !ok {
 			return errors.New("you are not implement Equals method for comparison"), false
