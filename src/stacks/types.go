@@ -5,8 +5,13 @@ type Element struct {
 	Value interface{}
 }
 
-// Stack is a basic LIFO stack that resizes as needed.
-type Stack struct {
-	elements []*Element
-	elementCount int
+// S is a basic LIFO stack that resizes as needed.
+type S struct {
+	Elements     []*Element
+	ElementCount int
+}
+
+type Stack interface {
+	Push(element *Element)
+	Pop() *Element
 }
