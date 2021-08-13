@@ -10,6 +10,6 @@ type TN struct {
 }
 
 type BST struct {
-	RN *TN
-	L  *sync.Mutex
+	RootN *TN
+	L     *sync.Mutex
 }

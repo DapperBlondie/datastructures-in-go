@@ -8,8 +8,8 @@ import (
 
 func NewBST() *BST {
 	bst := &BST{
-		RN: nil,
-		L:  &sync.Mutex{},
+		RootN: nil,
+		L:     &sync.Mutex{},
 	}
 
 	return bst
@@ -26,16 +26,17 @@ func (bst *BST) InsertElement(k int32, v interface{}) {
 		LN: nil,
 		RN: nil,
 	}
-	if bst.RN == nil {
-		bst.RN = tn
+	if bst.RootN == nil {
+		bst.RootN = tn
 	} else {
-
+		insertTN(bst.RootN, tn)
 	}
 }
 
-func insertTN(rn *TN, tn *TN) {
-	dType := reflect.TypeOf(rn.V)
-	values := []reflect.Value{reflect.ValueOf(rn.V), reflect.ValueOf(tn.V)}
+// insertTN a helper function for adding node to BST
+func insertTN(rootN *TN, tn *TN) {
+	dType := reflect.TypeOf(rootN.V)
+	values := []reflect.Value{reflect.ValueOf(rootN.V), reflect.ValueOf(tn.V)}
 	method, ok := dType.MethodByName("Equals")
 
 	if !ok {
@@ -44,18 +45,36 @@ func insertTN(rn *TN, tn *TN) {
 	}
 	result := method.Func.Call(values)
 	if result[0].Int() == 1 {
-		if rn.LN == nil {
-			rn.LN = tn
+		if rootN.LN == nil {
+			rootN.LN = tn
 		} else {
-			insertTN(rn.LN, tn)
+			insertTN(rootN.LN, tn)
 		}
 	} else {
 		if result[0].Int() == -1 {
-			if rn.RN == nil {
-				rn.RN = tn
+			if rootN.RN == nil {
+				rootN.RN = tn
 			} else {
-				insertTN(rn.RN, tn)
+				insertTN(rootN.RN, tn)
 			}
 		}
 	}
+}
+
+func (bst *BST) InOrderTraversTree(f func(v interface{})) {
+	bst.L.Lock()
+	defer bst.L.Unlock()
+	inOrderTraverseTree(bst.RootN, f)
+}
+
+func inOrderTraverseTree(rootN *TN, f func(v interface{})) {
+	if rootN != nil {
+		inOrderTraverseTree(rootN.LN, f)
+		f(rootN.V)
+		inOrderTraverseTree(rootN.RN, f)
+	} else if rootN == nil {
+		f(rootN.V)
+	}
+
+	return
 }
