@@ -99,3 +99,22 @@ func preOrderTraverseTree(rootN *TN, f func(v interface{})) {
 	}
 	return
 }
+
+// PostOrderTraverseTree use for traversing tree Root,Left,Right
+func (bst *BST) PostOrderTraverseTree(f func(v interface{})) {
+	bst.L.Lock()
+	defer bst.L.Unlock()
+	preOrderTraverseTree(bst.RootN, f)
+}
+
+// postOrderTraverseTree a helper function for BST.PostOrderTraverseTree
+func postOrderTraverseTree(rootN *TN, f func(v interface{})) {
+	if rootN != nil {
+		inOrderTraverseTree(rootN.LN, f)
+		inOrderTraverseTree(rootN.RN, f)
+		f(rootN.V)
+	} else if rootN == nil {
+		f(rootN.V)
+	}
+	return
+}
