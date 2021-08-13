@@ -6,7 +6,16 @@ import (
 	"sync"
 )
 
-func NewBST() *BST {
+var METHOD *reflect.Method
+
+func NewBST(v interface{}) *BST {
+	vType := reflect.TypeOf(v)
+	method, ok := vType.MethodByName("Equals")
+	if !ok {
+		log.Fatal("first implement the Equals method for compare node's values")
+	}
+	METHOD = &method
+
 	bst := &BST{
 		RootN: nil,
 		L:     &sync.Mutex{},
@@ -35,15 +44,9 @@ func (bst *BST) InsertElement(k int32, v interface{}) {
 
 // insertTN a helper function for adding node to BST
 func insertTN(rootN *TN, tn *TN) {
-	dType := reflect.TypeOf(rootN.V)
 	values := []reflect.Value{reflect.ValueOf(rootN.V), reflect.ValueOf(tn.V)}
-	method, ok := dType.MethodByName("Equals")
+	result := METHOD.Func.Call(values)
 
-	if !ok {
-		log.Fatal("you must implement Equals function for your data type")
-		return
-	}
-	result := method.Func.Call(values)
 	if result[0].Int() == 1 {
 		if rootN.LN == nil {
 			rootN.LN = tn
@@ -74,8 +77,6 @@ func inOrderTraverseTree(rootN *TN, f func(v interface{})) {
 		inOrderTraverseTree(rootN.LN, f)
 		f(rootN.V)
 		inOrderTraverseTree(rootN.RN, f)
-	} else if rootN == nil {
-		f(rootN.V)
 	}
 
 	return
@@ -94,8 +95,6 @@ func preOrderTraverseTree(rootN *TN, f func(v interface{})) {
 		f(rootN.V)
 		inOrderTraverseTree(rootN.LN, f)
 		inOrderTraverseTree(rootN.RN, f)
-	} else if rootN == nil {
-		f(rootN.V)
 	}
 	return
 }
@@ -113,9 +112,8 @@ func postOrderTraverseTree(rootN *TN, f func(v interface{})) {
 		inOrderTraverseTree(rootN.LN, f)
 		inOrderTraverseTree(rootN.RN, f)
 		f(rootN.V)
-	} else if rootN == nil {
-		f(rootN.V)
 	}
+
 	return
 }
 
@@ -126,7 +124,7 @@ func (bst *BST) MinTN() interface{} {
 
 	tn := bst.RootN
 	if tn == nil {
-		return tn.V
+		return nil
 	}
 	for {
 		if tn.LN == nil {
@@ -143,12 +141,36 @@ func (bst *BST) MaxTN() interface{} {
 
 	tn := bst.RootN
 	if tn == nil {
-		return tn.V
+		return nil
 	}
 	for {
 		if tn.RN == nil {
 			return tn.RN
 		}
 		tn = tn.RN
+	}
+}
+
+// SearchTN use for searching a specific TN.V in BST
+func (bst *BST) SearchTN(v interface{}) bool {
+	bst.L.Lock()
+	defer bst.L.Unlock()
+	return searchTN(bst.RootN, v)
+}
+
+// searchTN a helper function, useful for search a specific TN.V in BST
+func searchTN(rootN *TN, v interface{}) bool {
+	if rootN == nil {
+		return false
+	}
+	values := []reflect.Value{reflect.ValueOf(rootN.V), reflect.ValueOf(v)}
+	result := METHOD.Func.Call(values)
+
+	if result[0].Int() == 1 {
+		return searchTN(rootN.LN, v)
+	} else if result[0].Int() == -1 {
+		return searchTN(rootN.RN, v)
+	} else {
+		return true
 	}
 }
