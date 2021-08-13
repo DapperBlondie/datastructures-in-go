@@ -104,7 +104,7 @@ func preOrderTraverseTree(rootN *TN, f func(v interface{})) {
 func (bst *BST) PostOrderTraverseTree(f func(v interface{})) {
 	bst.L.Lock()
 	defer bst.L.Unlock()
-	preOrderTraverseTree(bst.RootN, f)
+	postOrderTraverseTree(bst.RootN, f)
 }
 
 // postOrderTraverseTree a helper function for BST.PostOrderTraverseTree
@@ -117,4 +117,38 @@ func postOrderTraverseTree(rootN *TN, f func(v interface{})) {
 		f(rootN.V)
 	}
 	return
+}
+
+// MinTN use for finding the deepest LeftNode in BST
+func (bst *BST) MinTN() interface{} {
+	bst.L.Lock()
+	defer bst.L.Unlock()
+
+	tn := bst.RootN
+	if tn == nil {
+		return tn.V
+	}
+	for {
+		if tn.LN == nil {
+			return tn.V
+		}
+		tn = tn.LN
+	}
+}
+
+// MaxTN use for finding the deepest RightNode in BST
+func (bst *BST) MaxTN() interface{} {
+	bst.L.Lock()
+	defer bst.L.Unlock()
+
+	tn := bst.RootN
+	if tn == nil {
+		return tn.V
+	}
+	for {
+		if tn.RN == nil {
+			return tn.RN
+		}
+		tn = tn.RN
+	}
 }
