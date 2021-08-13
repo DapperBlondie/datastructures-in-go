@@ -61,12 +61,14 @@ func insertTN(rootN *TN, tn *TN) {
 	}
 }
 
+// InOrderTraversTree use for traversing tree Left,Root,Right
 func (bst *BST) InOrderTraversTree(f func(v interface{})) {
 	bst.L.Lock()
 	defer bst.L.Unlock()
 	inOrderTraverseTree(bst.RootN, f)
 }
 
+// inOrderTraverseTree a helper function for BST.InOrderTraversTree
 func inOrderTraverseTree(rootN *TN, f func(v interface{})) {
 	if rootN != nil {
 		inOrderTraverseTree(rootN.LN, f)
@@ -76,5 +78,24 @@ func inOrderTraverseTree(rootN *TN, f func(v interface{})) {
 		f(rootN.V)
 	}
 
+	return
+}
+
+// PreOrderTraverseTree use for traversing tree Root,Left,Right
+func (bst *BST) PreOrderTraverseTree(f func(v interface{})) {
+	bst.L.Lock()
+	defer bst.L.Unlock()
+	preOrderTraverseTree(bst.RootN, f)
+}
+
+// preOrderTraverseTree a helper function for BST.PreOrderTraverseTree
+func preOrderTraverseTree(rootN *TN, f func(v interface{})) {
+	if rootN != nil {
+		f(rootN.V)
+		inOrderTraverseTree(rootN.LN, f)
+		inOrderTraverseTree(rootN.RN, f)
+	} else if rootN == nil {
+		f(rootN.V)
+	}
 	return
 }
