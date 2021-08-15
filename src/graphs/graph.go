@@ -5,6 +5,7 @@ import (
 	"sync"
 )
 
+// NewSocialGraph use for creating a social graph
 func NewSocialGraph(num int) *SocialGraph {
 	return &SocialGraph{
 		Size:  num,
@@ -13,6 +14,7 @@ func NewSocialGraph(num int) *SocialGraph {
 	}
 }
 
+// AddLink use for adding a link inside our SocialGraph
 func (sg *SocialGraph) AddLink(v1 int, v2 int, w int) {
 	sg.M.Lock()
 	defer sg.M.Unlock()
@@ -25,6 +27,7 @@ func (sg *SocialGraph) AddLink(v1 int, v2 int, w int) {
 	return
 }
 
+// PrintEntireGraph use for printing entire SocialGraph
 func (sg *SocialGraph) PrintEntireGraph() {
 	for _, adj := range sg.Links {
 		for _, link := range adj {
