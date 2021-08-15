@@ -94,6 +94,7 @@ func (d *Dict) GetValues() []Value {
 	return dictValues
 }
 
+// GetKeyByValue is used for returning Key by Value
 func (d *Dict) GetKeyByValue(v Value) Key {
 	var values []reflect.Value = []reflect.Value{reflect.ValueOf(v), reflect.ValueOf(v)}
 	for K, V := range d.E {

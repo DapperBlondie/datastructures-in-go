@@ -11,6 +11,7 @@ type Key interface{}
 // Value is a type for holding your complex objects that a pointer to a struct
 type Value *struct{}
 
+// Dict is the structure for holding sync.RWMutex and a map for holding data
 type Dict struct {
 	E map[Key]Value
 	M *sync.RWMutex
@@ -18,6 +19,7 @@ type Dict struct {
 
 var METHOD reflect.Method
 
+// Dictionary a python like implementation of dictionary
 type Dictionary interface {
 	Put(k Key, v Value)
 	Remove(k Key) bool
