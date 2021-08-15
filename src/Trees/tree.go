@@ -6,8 +6,6 @@ import (
 	"sync"
 )
 
-var METHOD *reflect.Method
-
 // NewBST use for creating new BST and get the Equals method
 func NewBST(v interface{}) *BST {
 	vType := reflect.TypeOf(v)

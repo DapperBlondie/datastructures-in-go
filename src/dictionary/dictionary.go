@@ -2,10 +2,17 @@ package dictionary
 
 import (
 	"github.com/rs/zerolog/log"
+	"reflect"
 	"sync"
 )
 
-func NewDict() *Dict {
+func NewDict(v Value) *Dict {
+	method, ok := reflect.TypeOf(v).MethodByName("Equals")
+	if !ok {
+		log.Error().Msg("you must implement the equals method")
+		return nil
+	}
+	METHOD = method
 	dict := &Dict{
 		E: make(map[Key]Value),
 		M: &sync.RWMutex{},
@@ -85,4 +92,17 @@ func (d *Dict) GetValues() []Value {
 	}
 
 	return dictValues
+}
+
+func (d *Dict) GetKeyByValue(v Value) Key {
+	var values []reflect.Value = []reflect.Value{reflect.ValueOf(v), reflect.ValueOf(v)}
+	for K, V := range d.E {
+		values[1] = reflect.ValueOf(V)
+		result := METHOD.Func.Call(values)
+		if result[0].Bool() {
+			return K
+		}
+	}
+
+	return false
 }

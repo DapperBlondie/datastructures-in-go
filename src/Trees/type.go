@@ -1,6 +1,9 @@
 package Trees
 
-import "sync"
+import (
+	"reflect"
+	"sync"
+)
 
 type TN struct {
 	K  int32
@@ -13,6 +16,8 @@ type BST struct {
 	RootN *TN
 	L     *sync.Mutex
 }
+
+var METHOD *reflect.Method
 
 type Trees interface {
 	InsertElement(k int32, v interface{})
