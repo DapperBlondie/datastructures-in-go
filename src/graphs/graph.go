@@ -29,6 +29,8 @@ func (sg *SocialGraph) AddLink(v1 int, v2 int, w int) {
 
 // PrintEntireGraph use for printing entire SocialGraph
 func (sg *SocialGraph) PrintEntireGraph() {
+	sg.M.RLock()
+	defer sg.M.RUnlock()
 	for _, adj := range sg.Links {
 		for _, link := range adj {
 			fmt.Printf("Link : %d -> %d (%d)\n", link.V1, link.V2, link.LinkW)
